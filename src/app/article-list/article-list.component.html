@@ -1,7 +1,19 @@
 <div *ngIf="likedArticleIds">
   <h2>from Algolia</h2>
 
-  <ais-instantsearch [config]="config">
+  <div style="margin-bottom: 1000px;"></div>
+
+  <ul>
+    <li *ngFor="let item of list">
+      {{ item.title }}
+      <button *ngIf="!isLiked(item.id)" (click)="like(item.id)">いいね</button>
+      <button *ngIf="isLiked(item.id)" (click)="unLike(item.id)">止める</button>
+      ({{ item.likeCount }})
+    </li>
+  </ul>
+  <div class="box" appVisible (visible)="moreSearch()">chekpoint</div>
+
+  <!-- <ais-instantsearch [config]="config">
     <ais-configure [searchParameters]="searchParams"></ais-configure>
     <ais-search-box></ais-search-box>
 
@@ -44,7 +56,7 @@
         <div class="box" appVisible (visible)="refine()">chekpoint</div>
       </ng-template>
     </ais-infinite-hits>
-  </ais-instantsearch>
+  </ais-instantsearch> -->
 </div>
 <!-- <div>
     <h2>from Firestore</h2>

@@ -5,7 +5,10 @@ import { Observable } from 'rxjs';
 import { Article } from '../interfaces/article';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-const algoliasearch = require('algoliasearch/lite');
+// const algoliasearch = require('algoliasearch/lite');
+
+import * as algoliasearch from 'algoliasearch/lite';
+import { QueryParameters } from 'algoliasearch';
 
 const searchClient = algoliasearch(
   'MNGF6MV1S0',
@@ -24,18 +27,23 @@ export class ArticleListComponent implements OnInit {
     searchClient,
   };
 
+  saerchSetting: QueryParameters = {
+    query: '',
+    page: 0,
+    hitsPerPage: 3,
+  };
+
   searchParams = {
     hitsPerPage: 4,
   };
 
+  index = searchClient.initIndex('articles');
+
   likedArticleIds: string[];
 
-  staticState: {
-    [key: string]: {
-      count: number;
-      isLiked: boolean;
-    };
-  } = {};
+  likeState = {};
+
+  list: Article[];
 
   constructor(
     private articleService: ArticleService,
@@ -45,6 +53,10 @@ export class ArticleListComponent implements OnInit {
     this.userService.getLikedArticleIds('AAA').then((articleIds) => {
       this.likedArticleIds = articleIds;
     });
+
+    this.index.search(this.saerchSetting).then((result) => {
+      this.list = result.hits;
+    });
   }
 
   ngOnInit(): void {}
@@ -53,13 +65,10 @@ export class ArticleListComponent implements OnInit {
     console.log('hit');
   }
 
-  like(id: string, likeCount: number) {
-    const count: number = this.staticState[id]
-      ? ++this.staticState[id].count
-      : ++likeCount;
-
-    this.staticState[id] = {
-      count,
+  like(id: string) {
+    const index = this.list.findIndex((list) => list.id === id);
+    this.list[index].likeCount++;
+    this.likeState[id] = {
       isLiked: true,
     };
 
@@ -70,15 +79,10 @@ export class ArticleListComponent implements OnInit {
     });
   }
 
-  unLike(id: string, likeCount: number) {
-    const count = this.staticState[id]
-      ? --this.staticState[id].count
-      : --likeCount;
-
-    console.log(count);
-
-    this.staticState[id] = {
-      count,
+  unLike(id: string) {
+    const index = this.list.findIndex((list) => list.id === id);
+    this.list[index].likeCount--;
+    this.likeState[id] = {
       isLiked: false,
     };
 
@@ -90,10 +94,17 @@ export class ArticleListComponent implements OnInit {
   }
 
   isLiked(id: string): boolean {
-    if (this.staticState[id]) {
-      return this.staticState[id].isLiked;
+    if (this.likeState[id]) {
+      return this.likeState[id].isLiked;
     } else {
       return this.likedArticleIds?.includes(id);
     }
+  }
+
+  moreSearch() {
+    this.saerchSetting.page++;
+    this.index.search(this.saerchSetting).then((result) => {
+      this.list = this.list.concat(result.hits);
+    });
   }
 }
