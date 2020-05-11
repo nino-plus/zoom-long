@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "zoom-long": {
+      "hosting": {
+        "zoom-long": [
+          "zoom-long"
+        ]
+      }
+    }
+  }
+}
