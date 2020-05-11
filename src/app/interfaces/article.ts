@@ -5,5 +5,7 @@ export interface Article {
   title: string;
   body: string;
   public: boolean;
+  likeCount: number;
   createdAt: firestore.Timestamp;
+  tags: string[];
 }

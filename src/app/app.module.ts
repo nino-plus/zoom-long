@@ -10,6 +10,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireFunctionsModule, REGION } from '@angular/fire/functions';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
+import { NgAisModule } from 'angular-instantsearch';
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,6 +22,7 @@ import { environment } from '../environments/environment';
     AngularFireFunctionsModule,
     AngularFirestoreModule,
     AngularFireAuthModule,
+    NgAisModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase),
   ],
   providers: [{ provide: REGION, useValue: 'asia-northeast1' }],

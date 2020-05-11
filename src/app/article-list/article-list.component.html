@@ -1,0 +1,59 @@
+<div *ngIf="likedArticleIds">
+  <h2>from Algolia</h2>
+
+  <ais-instantsearch [config]="config">
+    <ais-configure [searchParameters]="searchParams"></ais-configure>
+    <ais-search-box></ais-search-box>
+
+    <ais-refinement-list
+      attribute="tags"
+      operator="and"
+      [searchable]="true"
+    ></ais-refinement-list>
+
+    <ais-infinite-hits>
+      <ng-template let-hits="hits" let-results="results" let-refine="showMore">
+        <ol>
+          <li *ngFor="let hit of hits">
+            {{ hit.title }}
+            <button
+              (click)="unLike(hit.id, hit.likeCount)"
+              *ngIf="isLiked(hit.id)"
+            >
+              いいね解除
+            </button>
+            <button
+              (click)="like(hit.id, hit.likeCount)"
+              *ngIf="!isLiked(hit.id)"
+            >
+              いいね
+            </button>
+            <ng-container
+              *ngIf="
+                staticState[hit.id] || staticState[hit.id]?.count === 0;
+                else algoliaCount
+              "
+            >
+              ({{ staticState[hit.id]?.count }})
+            </ng-container>
+            <ng-template #algoliaCount>
+              ({{ hit.likeCount || 0 }})
+            </ng-template>
+          </li>
+        </ol>
+        <div class="box" appVisible (visible)="refine()">chekpoint</div>
+      </ng-template>
+    </ais-infinite-hits>
+  </ais-instantsearch>
+</div>
+<!-- <div>
+    <h2>from Firestore</h2>
+
+    <ul>
+      <li *ngFor="let article of articles$ | async">
+        <h2>{{ article.title }}</h2>
+        <h2>{{ article.body }}</h2>
+        <h2>{{ article.createdAt.toDate() | date: 'yyyy/MM/dd' }}</h2>
+      </li>
+    </ul>
+  </div> -->

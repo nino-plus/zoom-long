@@ -1,4 +1,4 @@
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { Article } from './../interfaces/article';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -14,6 +14,10 @@ export class ArticleService {
     return this.db.doc<Article>(`articles/${id}`).valueChanges();
   }
 
+  getArticles(): Observable<Article[]> {
+    return this.db.collection<Article>('articles').valueChanges();
+  }
+
   deleteArticle(id: string): Promise<void> {
     return this.db.doc<Article>(`articles/${id}`).delete();
   }
@@ -25,12 +29,24 @@ export class ArticleService {
   createArticle(article: Omit<Article, 'id' | 'createdAt'>): Promise<void> {
     const id = this.db.createId();
 
-    console.log(article);
-
     return this.db.doc(`articles/${id}`).set({
       id,
       createdAt: firestore.Timestamp.now(),
+      likeCount: 0,
       ...article,
     });
+  }
+
+  likeArticle(articleId: string): Promise<void> {
+    const uid = 'AAA';
+    return this.db.doc(`articles/${articleId}/likeUsers/${uid}`).set({
+      articleId,
+      uid,
+    });
+  }
+
+  unLikeArticle(id: string): Promise<void> {
+    const uid = 'AAA';
+    return this.db.doc(`articles/${id}/likeUsers/${uid}`).delete();
   }
 }

@@ -19,6 +19,26 @@
       required
     />
   </mat-form-field>
+  <h2>タグ</h2>
+  <div formGroupName="tags">
+    <label>
+      <input type="checkbox" formControlName="cooking" />
+      cooking
+    </label>
+    <label>
+      <input type="checkbox" formControlName="fight" />
+      fight
+    </label>
+    <label>
+      <input type="checkbox" formControlName="sky" />
+      sky
+    </label>
+    <label>
+      <input type="checkbox" formControlName="book" />
+      book
+    </label>
+  </div>
+
   <mat-slide-toggle formControlName="public">Public</mat-slide-toggle>
   <button mat-raised-button color="primary" [disabled]="form.invalid">
     submit

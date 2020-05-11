@@ -3,10 +3,16 @@ import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: '',
-    pathMatch: 'full',
+    path: 'editor',
     loadChildren: () =>
       import('./editor/editor.module').then((m) => m.EditorModule),
+  },
+  {
+    path: 'articles',
+    loadChildren: () =>
+      import('./article-list/article-list.module').then(
+        (m) => m.ArticleListModule
+      ),
   },
 ];
 

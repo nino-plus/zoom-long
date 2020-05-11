@@ -13,6 +13,12 @@ export class EditorComponent implements OnInit {
     title: ['', [Validators.required]],
     body: ['', [Validators.required]],
     public: [true],
+    tags: this.fb.group({
+      cooking: [false],
+      fight: [false],
+      sky: [false],
+      book: [false],
+    }),
   });
 
   constructor(
@@ -24,7 +30,12 @@ export class EditorComponent implements OnInit {
   ngOnInit(): void {}
 
   submit() {
-    console.log('check');
+    const data = this.form.value;
+
+    data.tags = Object.entries(data.tags)
+      .filter(([key, value]) => value)
+      .map(([key]) => key);
+
     this.articleService
       .createArticle(this.form.value)
       .then(() => {

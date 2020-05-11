@@ -1,0 +1,9 @@
+.wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.box {
+  background: red;
+  padding: 16px;
+}
