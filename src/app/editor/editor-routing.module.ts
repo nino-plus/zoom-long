@@ -1,3 +1,4 @@
+import { EditorComponent } from './editor.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -5,13 +6,12 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    loadChildren: () =>
-      import('./editor/editor.module').then((m) => m.EditorModule),
+    component: EditorComponent,
   },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class EditorRoutingModule {}
